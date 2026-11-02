@@ -268,13 +268,37 @@
   </footer>
 
   <script>
-    let cartCount = 0;
+    
+let cart = [];
 
-    function addToCart() {
-      cartCount++;
-      document.getElementById("cartCount").textContent = cartCount;
-      alert("Product added to your cart!");
-    }
+  function addToCart() {
+  const button = document.activeElement;
+  const product = button.closest(".product");
+  const name = product.querySelector("h3").textContent;
+  const price = Number(
+    product.querySelector(".price").textContent
+      .replace(/[₦,]/g, "")
+  );
+
+  const existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({ name, price, quantity: 1 });
+  }
+
+  updateCart();
+  alert(name + " added to your cart!");
+}
+
+function updateCart() {
+  const count = cart.reduce(
+    (total, item) => total + item.quantity, 0
+  );
+
+  document.getElementById("cartCount").textContent = count;
+}
 
     function filterCategory(category) {
       document.getElementById("search").value = "";
